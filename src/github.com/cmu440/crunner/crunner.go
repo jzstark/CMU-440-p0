@@ -1,12 +1,15 @@
 package main
 
 import (
-    "fmt"
+	"fmt"
+	"net"
+	"os"
+	"strconv"
 )
 
 const (
-    defaultHost = "localhost"
-    defaultPort = 9999
+	defaultHost = "localhost"
+	defaultPort = 9999
 )
 
 // To test your server implementation, you might find it helpful to implement a
@@ -15,5 +18,25 @@ const (
 // read and print out the server's response to standard output. Whether or
 // not you add any code to this file will not affect your grade.
 func main() {
-    fmt.Println("Not implemented.")
+	tcpAddr, err := net.ResolveTCPAddr("tcp4", defaultHost+":"+strconv.Itoa(defaultPort))
+	if err != nil {
+		os.Exit(1)
+	}
+
+	//dial from local address to remote address
+	conn, err := net.DialTCP("tcp", nil, tcpAddr)
+	if err != nil {
+		os.Exit(1)
+	}
+
+	fmt.Println("connect success")
+	//send message
+	getValue(conn)
+	conn.Close()
+}
+
+func getValue(conn net.Conn) {
+	words := "hello world"
+	conn.Write([]byte(words))
+	fmt.Println("send out", words)
 }
