@@ -36,7 +36,7 @@ func main() {
 }
 
 func getValue(conn net.Conn) {
-	words := "hello world"
+	words := "hello world\n"
 	conn.Write([]byte(words))
-	fmt.Println("send out", words)
+	fmt.Print("send out: ", words)
 }

@@ -38,14 +38,8 @@ func (kvs *keyValueServer) Start(port int) error {
 			continue
 		}
 
-		buffer := make([]byte, 2048)
-		n, err := conn.Read(buffer)
+		go connHandler(conn)
 
-		if err != nil {
-			return nil
-		}
-
-		fmt.Printf("%d %s\n", n, buffer)
 	}
 
 	return nil
@@ -67,4 +61,17 @@ func checkError(err error) {
 		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
 		os.Exit(1)
 	}
+}
+
+func connHandler(conn net.Conn) {
+	fmt.Printf("start a goroutine to handle: %s\n", conn.RemoteAddr().String())
+	buff := make([]byte, 2048)
+
+	_, err := conn.Read(buff)
+
+	if err != nil {
+		return
+	}
+
+	fmt.Print("received: ", string(buff))
 }
