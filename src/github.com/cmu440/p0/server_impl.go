@@ -14,6 +14,7 @@ type keyValueServer struct {
 	// TODO: implement this!
 	listener net.Listener
 	port     int16
+	cliPool  []*net.Conn
 }
 
 // New creates and returns (but does not start) a new KeyValueServer.
@@ -23,6 +24,7 @@ func New() KeyValueServer {
 	return &keyValueServer{
 		listener: nil,
 		port:     0,
+		cliPool:  make([]*net.Conn),
 	}
 }
 
@@ -51,7 +53,8 @@ func (kvs *keyValueServer) Close() {
 
 func (kvs *keyValueServer) Count() int {
 	// TODO: implement this!
-	return -1
+	return len(kvs.cliPool)
+	//	return -1
 }
 
 // TODO: add additional methods/functions below!
